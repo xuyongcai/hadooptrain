@@ -1,4 +1,4 @@
-package com.imooc.hadoop.mapreduce;
+package com.imooc.hadoop.chapter04;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -14,39 +14,45 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import java.io.IOException;
 
 /**
- * 2.访问次数排序
+ * 1.用户访问次数统计
  * @author: xiaochai
  * @create: 2018-11-28
  **/
-public class AccessTimesSort {
+public class DailyAccessCount {
 
-    public static class MyMapper extends Mapper<Object, Text, IntWritable, Text> {
+    public static class MyMapper extends Mapper<Object, Text, Text, IntWritable>{
+
+        private static final IntWritable one = new IntWritable(1);
 
         @Override
         protected void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             //读取一行
             String line = value.toString();
-            //指定tab为分割符
-            String[] vals = line.split("\t");
+            String[] vals = line.split(",");
 
-            //访问次数作为输出key
-            Integer keyOutput = Integer.parseInt(vals[1]);
+            //提取数组中的访问日期作为输出key
+            String keyOutput = vals[1];
 
-            String valueOutput = vals[0];
-
-            context.write(new IntWritable(keyOutput), new Text(valueOutput));
+            context.write(new Text(keyOutput), one);
         }
     }
 
-    public static class MyReducer extends Reducer<IntWritable, Text, Text, IntWritable> {
+    public static class MyReducer extends Reducer<Text, IntWritable, Text, IntWritable>{
+
+        private IntWritable result = new IntWritable();
 
         @Override
-        protected void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+        protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 
-            //数据传到ruduce前，内部sorter已经按照key进行了排序，故只需要交换key和val输出就行。
-            for (Text val : values){
-                context.write(val, key);
+            int sum = 0; //定义类加强，初始值为0
+
+            for (IntWritable val : values){
+                //将相同键的所有值进行累加
+                sum += val.get();
             }
+            result.set(sum);
+
+            context.write(key, result);
         }
     }
 
@@ -59,18 +65,18 @@ public class AccessTimesSort {
         Configuration configuration = new Configuration();
 
         //创建job
-        Job job = Job.getInstance(configuration,"access_times_sort");
+        Job job = Job.getInstance(configuration,"daily_access_count");
 
         //设置job的处理类
-        job.setJarByClass(AccessTimesSort.class);
+        job.setJarByClass(DailyAccessCount.class);
 
         //设置map相关参数
-        job.setMapperClass(AccessTimesSort.MyMapper.class);
-        job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(Text.class);
+        job.setMapperClass(DailyAccessCount.MyMapper.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(IntWritable.class);
 
         //设置reduce相关参数
-        job.setReducerClass(AccessTimesSort.MyReducer.class);
+        job.setReducerClass(DailyAccessCount.MyReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
