@@ -1,4 +1,4 @@
-package com.imooc.hadoop.chapter04;
+package com.xuyongcai.hadoop.chapter04;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;

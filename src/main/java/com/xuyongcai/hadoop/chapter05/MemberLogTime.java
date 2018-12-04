@@ -1,4 +1,4 @@
-package com.imooc.hadoop.chapter05;
+package com.xuyongcai.hadoop.chapter05;
 
 import org.apache.hadoop.io.WritableComparable;
 
