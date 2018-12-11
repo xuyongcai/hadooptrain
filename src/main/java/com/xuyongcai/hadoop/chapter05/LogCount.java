@@ -11,7 +11,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import java.io.IOException;
 
 /**
- * 日志文件统计驱动类实现代码
+ * 2.日志文件统计驱动类实现代码
  * @author: xiaochai
  * @create: 2018-11-29
  **/
@@ -21,6 +21,12 @@ public class LogCount {
      * 定义Driver：封装了MapReduce作业的所有信息
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+
+        if (args.length != 2){
+            args = new String[2];
+            args[0] = "hdfs://localhost:9000/user/root/user_login/JanFeb/part-m-00000";
+            args[1] = "hdfs://localhost:9000/user/root/user_login/logcount";
+        }
 
         //创建configuration
         Configuration configuration = new Configuration();

@@ -6,6 +6,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import java.io.IOException;
 
 /**
+ * 2.日志文件统计reducer类
  * @author: xiaochai
  * @create: 2018-11-29
  **/

@@ -7,6 +7,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
+ * 2.定义mapper的输出类型
  * @author: xiaochai
  * @create: 2018-11-29
  **/
@@ -20,7 +21,7 @@ public class MemberLogTime implements WritableComparable<MemberLogTime> {
 
     public MemberLogTime(String member_name, String logTime) {
         this.member_name = member_name;
-        logTime = logTime;
+        this.logTime = logTime;
     }
 
     public String getMember_name() {
@@ -36,7 +37,7 @@ public class MemberLogTime implements WritableComparable<MemberLogTime> {
     }
 
     public void setLogTime(String logTime) {
-        logTime = logTime;
+        this.logTime = logTime;
     }
 
 

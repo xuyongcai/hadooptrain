@@ -1,16 +1,18 @@
 package com.xuyongcai.hadoop.chapter05;
 
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
 /**
+ * 2.日志文件统计mapper类
  * @author: xiaochai
  * @create: 2018-11-29
  **/
-public class LogCountMapper extends Mapper<Text, Text, MemberLogTime, IntWritable> {
+public class LogCountMapper extends Mapper<LongWritable, Text, MemberLogTime, IntWritable> {
 
     private MemberLogTime mt = new MemberLogTime();
     private IntWritable one = new IntWritable(1);
@@ -21,8 +23,8 @@ public class LogCountMapper extends Mapper<Text, Text, MemberLogTime, IntWritabl
     }
 
     @Override
-    protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {
-        String[] vals = value.toString().split(" ");
+    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        String[] vals = value.toString().split("\t");
         String member_name = vals[0];
         String logTime = vals[1];
 

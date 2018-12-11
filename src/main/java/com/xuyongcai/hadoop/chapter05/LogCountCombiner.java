@@ -6,10 +6,12 @@ import org.apache.hadoop.mapreduce.Reducer;
 import java.io.IOException;
 
 /**
+ * 2.日志文件统计Combiner类
  * @author: xiaochai
  * @create: 2018-11-29
  **/
 public class LogCountCombiner extends Reducer<MemberLogTime, IntWritable, MemberLogTime, IntWritable> {
+
     @Override
     protected void reduce(MemberLogTime key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
         int sum = 0;
